@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tenzing Dhendup Dorji | Software engineer</title>
+  <meta name="description" content="Tenzing Dhendup Dorji studies computer science and economics at Davidson College and builds full-stack and machine learning projects.">
+  <meta name="theme-color" content="#182b52">
+  <!-- TODO(tenzing): set the real URL once the site is deployed -->
+  <meta property="og:title" content="Tenzing Dhendup Dorji">
+  <meta property="og:description" content="Computer science and economics at Davidson College. Full-stack and machine learning projects.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/marcellus-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/albert-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/sections.css">
+</head>
+<body>
+  <a class="skip-link" href="#character">Skip to content</a>
+
+  <!-- The sky: a fixed gradient that moves from dawn to night as you scroll, with a canvas of clouds, birds and stars on top. -->
+  <div class="sky" aria-hidden="true">
+    <canvas id="sky-canvas"></canvas>
+  </div>
+
+  <header class="hud" id="hud">
+    <a class="hud__mark" href="#start" aria-label="Back to the start">TDD</a>
+
+    <nav class="compass" aria-label="Sections">
+      <div class="compass__window">
+        <div class="compass__track" id="compass-track"><!-- markers are built in js/hud.js --></div>
+      </div>
+      <span class="compass__needle" aria-hidden="true"></span>
+    </nav>
+
+    <div class="sundial" aria-hidden="true">
+      <svg viewBox="0 0 40 24" width="40" height="24">
+        <path d="M4 20 A16 16 0 0 1 36 20" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="1"/>
+        <line x1="1" y1="20" x2="39" y2="20" stroke="currentColor" stroke-opacity=".55" stroke-width="1"/>
+        <circle id="sundial-body" cx="4" cy="20" r="3.2"/>
+      </svg>
+      <span class="sundial__time" id="sundial-time">05:30</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ START SCREEN ============ -->
+    <section class="hero" id="start" data-nav="Start">
+      <div class="wrap hero__inner">
+        <h1 class="hero__name" aria-label="Tenzing Dhendup Dorji">
+          <span class="hero__line" data-split>Tenzing</span>
+          <span class="hero__line" data-split>Dhendup Dorji</span>
+        </h1>
+        <span class="hero__rule" aria-hidden="true"></span>
+        <div class="hero__row">
+          <div class="hero__lead">
+            <p class="hero__sub">I study computer science and economics at Davidson College, and I build full-stack and machine learning projects on the side.</p>
+
+            <ul class="menu" id="menu">
+              <li><a href="#character">Continue <span>about me</span></a></li>
+              <li><a href="#quests">Quest log <span>experience</span></a></li>
+              <li><a href="#inventory">Inventory <span>projects</span></a></li>
+              <li><a href="#skills">Skill tree <span>what I work with</span></a></li>
+              <li><a href="#contact">Send word <span>contact</span></a></li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="keys" aria-hidden="true">
+          <kbd>1</kbd> to <kbd>5</kbd> jump between sections
+          <span class="keys__birds"><span class="keys__sep"></span> move your cursor to steer the birds</span>
+        </p>
+      </div>
+
+      <div class="ridge" aria-hidden="true">
+        <svg id="ridge-svg" viewBox="0 0 1600 420" preserveAspectRatio="none"></svg>
+        <div class="ridge__fog"></div>
+      </div>
+
+      <!-- Homage: the tallest far peak carries prayer flags. Clicking them opens a note about Tenzing Norgay. -->
+      <button class="summit" id="summit" type="button" aria-expanded="false" aria-controls="summit-note" aria-label="Prayer flags on the summit. Read the note.">
+        <svg viewBox="0 0 64 44" width="64" height="44" aria-hidden="true">
+          <line x1="20" y1="44" x2="20" y2="8" stroke="#1a2238" stroke-width="1.6" stroke-linecap="round"/>
+          <g class="summit__flags">
+            <path d="M20 9 Q40 20 62 22" fill="none" stroke="#1a2238" stroke-width="0.8"/>
+            <path d="M24 11.5 l6 2.6 -4.6 5.4z" fill="#3b6fb5"/>
+            <path d="M32 15 l6 2 -4 5.8z" fill="#f6f1e4"/>
+            <path d="M40 17.8 l6 1.5 -3.6 6z" fill="#b5432e"/>
+            <path d="M48 19.8 l6 1 -3.2 6.2z" fill="#3f7f5a"/>
+            <path d="M55.5 21.2 l5.6 .6 -2.8 6.2z" fill="#e2b93b"/>
+          </g>
+        </svg>
+        <span class="summit__ping" aria-hidden="true"></span>
+      </button>
+      <!-- A speech bubble that floats right above the flags. It is positioned over the sky, so it never moves the text around it. -->
+      <div class="summit__note parchment" id="summit-note" role="group" aria-label="About the flagged peak" hidden>
+        <button class="summit__close" id="summit-close" type="button" aria-label="Close">&times;</button>
+        <p class="summit__height">Everest, 8,849 m</p>
+        <p>On 29 May 1953, Tenzing Norgay and Edmund Hillary became the first people to stand on top of the world. I share his first name, so the tallest peak on this page flies its flags for him. The 2026 film <cite>Tenzing</cite> tells his story.</p>
+        <blockquote class="summit__vow">
+          <p>I, too, will climb Everest one day.</p>
+          <footer>Tenzing</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ============ CHARACTER ============ -->
+    <section class="section" id="character" data-nav="About">
+      <div class="wrap">
+        <header class="section__head">
+          <h2>Player</h2>
+          <p>Who I am, in short.</p>
+        </header>
+
+        <div class="parchment sheet">
+          <figure class="sheet__portrait">
+            <!-- TODO(tenzing): replace with <img src="assets/img/portrait.jpg" alt="Portrait of Tenzing Dhendup Dorji"> (4:5, at least 800x1000) -->
+            <div class="placeholder placeholder--portrait" role="img" aria-label="Portrait placeholder">
+              <svg viewBox="0 0 64 64" width="56" height="56" aria-hidden="true"><circle cx="32" cy="24" r="11" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 58c2-13 11-19 22-19s20 6 22 19" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Your portrait goes here</span>
+              <code>assets/img/portrait.jpg</code>
+            </div>
+          </figure>
+
+            <div class="sheet__bio">
+              <!-- TODO(tenzing): this bio is a draft written from your resume. Rewrite it in your own words. -->
+              <p class="dropcap">My name is Tenzing. I study computer science and economics at Davidson College, and most of what I do outside class is building software people can actually use: a tool that forecasts when internship applications open, a browser extension that fills out long web forms for you, a finance app you can ask questions about your own spending.</p>
+              <p>In the summer of 2025 I worked at the ALPhA Lab, training point-cloud models on detector data from the Facility for Rare Isotope Beams. Since then I've built an AI study tool for a startup client and helped run Hack@Davidson.</p>
+              <p class="draft-note"><strong>Draft bio.</strong> Add a paragraph only you can write: where you're from, what you play, and what kind of work you want next.</p>
+            </div>
+
+            <dl class="attrs">
+              <div><dt>Class</dt><dd>Computer Science and Economics, B.S.</dd></div>
+              <div><dt>Guild</dt><dd>Davidson College, class of 2028</dd></div>
+              <div><dt>Standing</dt><dd>GPA 3.9, major GPA 4.0</dd></div>
+              <!-- TODO(tenzing): check this says what you are looking for. -->
+              <div><dt>Current objective</dt><dd>A software engineering internship for summer 2027</dd></div>
+            </dl>
+
+          <dl class="stats">
+            <div class="stats__full"><dt>Training</dt><dd>Data Structures, Database Systems, Data Engineering, Machine Reasoning, Multivariable Calculus, Statistics and Econometrics</dd></div>
+            <div class="stats__full">
+              <dt>Hobbies and interests</dt>
+              <dd>
+                <ul class="tags">
+                  <li>Photography</li>
+                  <li>Video games</li>
+                  <li>Basketball</li>
+                  <li>Volleyball</li>
+                  <li>Guitar</li>
+                  <li>Poetry writing</li>
+                  <li>Travelling</li>
+                  <li>Learning languages</li>
+                  <li>Dancing</li>
+                </ul>
+              </dd>
+            </div>
+            <div class="stats__tongues">
+              <dt>Tongues</dt>
+              <dd>
+                <ul class="tongues">
+                  <li><span>Dzongkha</span><i class="pips" data-level="4" aria-hidden="true"></i><em>native</em></li>
+                  <li><span>English</span><i class="pips" data-level="4" aria-hidden="true"></i><em>fluent</em></li>
+                  <li><span>Hindi / Urdu</span><i class="pips" data-level="2" aria-hidden="true"></i><em>conversational</em></li>
+                  <li><span>Spanish</span><i class="pips" data-level="1" aria-hidden="true"></i><em>elementary</em></li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ QUEST LOG ============ -->
+    <section class="section" id="quests" data-nav="Work">
+      <div class="wrap">
+        <header class="section__head">
+          <h2>Quest log</h2>
+          <p>Where I've worked and what I did there. Pick a quest to read it, or open the map to see where it happened.</p>
+        </header>
+
+        <!-- A scroll: two rollers with the parchment between them. It unrolls once when it first scrolls into view. -->
+        <div class="scroll" id="quest-scroll">
+          <div class="scroll__rod" aria-hidden="true"></div>
+          <div class="parchment scroll__paper">
+            <div class="scroll__tabs" role="tablist" aria-label="Quest log views">
+              <button class="scroll__tab" role="tab" type="button" id="view-tab-quests" aria-controls="view-quests" aria-selected="true">Quests</button>
+              <button class="scroll__tab" role="tab" type="button" id="view-tab-map" aria-controls="view-map" aria-selected="false" tabindex="-1">Map</button>
+            </div>
+            <div class="questlog" id="view-quests" role="tabpanel" aria-labelledby="view-tab-quests">
+              <div class="questlog__list" id="quest-list" role="tablist" aria-label="Experience" aria-orientation="vertical"><!-- built in js/quests.js from js/content.js --></div>
+              <div class="questlog__detail" id="quest-detail" role="tabpanel" tabindex="0"></div>
+            </div>
+            <div class="worldmap" id="view-map" role="tabpanel" aria-labelledby="view-tab-map" hidden><!-- built in js/map.js --></div>
+          </div>
+          <div class="scroll__rod" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INVENTORY ============ -->
+    <section class="section" id="inventory" data-nav="Projects">
+      <div class="wrap">
+        <header class="section__head">
+          <h2>Inventory</h2>
+          <p>The projects I've built and the tools I carry. Pick a slot to inspect it.</p>
+        </header>
+
+        <div class="parchment bag" id="bag">
+          <div class="scroll__tabs" role="tablist" aria-label="Inventory pouches">
+            <button class="scroll__tab" role="tab" type="button" id="bag-tab-projects" aria-controls="bag-body" aria-selected="true">Projects</button>
+            <button class="scroll__tab" role="tab" type="button" id="bag-tab-tools" aria-controls="bag-body" aria-selected="false" tabindex="-1">Tools</button>
+          </div>
+          <div class="bag__body" id="bag-body" role="tabpanel">
+            <div class="bag__left">
+              <div class="bag__grid" id="bag-grid"><!-- slots are built in js/inventory.js from js/content.js --></div>
+              <p class="bag__count" id="bag-count"></p>
+            </div>
+            <div class="bag__detail" id="bag-detail" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SKILL TREE ============ -->
+    <section class="section section--night" id="skills" data-nav="Skills">
+      <div class="wrap">
+        <header class="section__head">
+          <h2>Skill tree</h2>
+          <p class="only-wide">Everything I work with, drawn as four constellations. Brighter stars are the ones my projects lean on. Hover one to see where.</p>
+          <p class="only-narrow">Everything I work with. The gold ones are what my projects lean on.</p>
+        </header>
+
+        <div class="constellation">
+          <svg id="constellation-svg" viewBox="0 0 1200 600" aria-hidden="true"></svg>
+          <p class="constellation__readout" id="skill-readout" aria-hidden="true">Hover a star.</p>
+        </div>
+        <div class="skill-lists" id="skill-lists"><!-- same data as a plain list: shown on small screens, read by screen readers --></div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="section section--night contact" id="contact" data-nav="Contact">
+      <div class="wrap">
+        <h2 class="contact__title">Send word.</h2>
+        <!-- TODO(tenzing): check this line says what you are actually looking for right now. -->
+        <p class="contact__lede">I'm looking for software engineering internships for summer 2027. If you're hiring, or you just want to talk about something I built, email is the fastest way to reach me.</p>
+
+        <!-- TODO(tenzing): confirm this is the address you want public. -->
+        <!-- The whole block is one email link: a raven lands on a branch in front of the moon, carrying a sealed letter,
+             and the gold button beside it says what clicking does. The flight is set up in js/extras.js. -->
+        <a class="raven" id="raven" href="mailto:tenzingdhendupd@gmail.com">
+          <span class="raven__art" aria-hidden="true">
+            <svg viewBox="0 0 220 210" width="220" height="210">
+              <circle class="raven__moon" cx="110" cy="100" r="88"/>
+              <circle cx="78" cy="66" r="13" fill="#d8ccac" opacity=".5"/>
+              <circle cx="146" cy="52" r="7" fill="#d8ccac" opacity=".45"/>
+              <circle cx="158" cy="124" r="10" fill="#d8ccac" opacity=".35"/>
+              <path class="raven__branch" d="M2 176 C58 166 126 172 218 152"/>
+              <path class="raven__branch raven__branch--twig" d="M168 160 C178 148 190 144 204 140"/>
+              <g id="raven-bird">
+                <g class="raven__bird">
+                  <path d="M134 140 L178 172 L165 177 L155 168 L150 180 L124 152 Z"/>
+                  <path d="M112 153 L108 168 M124 150 L122 166" fill="none" stroke-width="3" stroke-linecap="round"/>
+                  <ellipse cx="118" cy="120" rx="27" ry="39" transform="rotate(28 118 120)"/>
+                  <circle cx="94" cy="80" r="17"/>
+                  <path d="M83 68 C68 68 57 74 50 83 C63 86 74 88 86 88 Z"/>
+                  <path d="M84 94 l-7 9 9 -3 -3 10 10 -7 Z"/>
+                  <path class="raven__wing" d="M104 96 C130 94 146 116 150 148 C130 144 110 130 104 96 Z"/>
+                  <circle class="raven__eye" cx="89" cy="75" r="2.6"/>
+                </g>
+                <g class="raven__letter">
+                  <path d="M50 83 L46 92" fill="none" stroke="#a8391f" stroke-width="1.6"/>
+                  <rect x="27" y="91" width="38" height="25" rx="3"/>
+                  <path d="M28 93 L46 106 L64 93" fill="none"/>
+                  <circle class="raven__seal" cx="46" cy="106" r="5.5"/>
+                </g>
+              </g>
+            </svg>
+          </span>
+          <span class="raven__text">
+            <span class="btn btn--primary">Send a raven</span>
+            <span class="raven__address">tenzingdhendupd@gmail.com</span>
+            <span class="raven__hint">Opens a new email to me</span>
+          </span>
+        </a>
+
+        <ul class="links">
+          <li><a href="https://github.com/TDhendupD" rel="noopener">GitHub <span>TDhendupD</span></a></li>
+          <li><a href="https://www.linkedin.com/in/tenzing-dhendup-dorji/" rel="noopener">LinkedIn <span>tenzing-dhendup-dorji</span></a></li>
+          <!-- TODO(tenzing): add assets/resume.pdf (a public copy without your phone number), then remove data-placeholder -->
+          <li><a href="assets/resume.pdf" data-placeholder>Résumé <span>PDF not added yet</span></a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <p>Designed and built by Tenzing. Version 0.8.</p>
+      <p>Not affiliated with any game studio. The sky is drawn in code.</p>
+    </div>
+  </footer>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

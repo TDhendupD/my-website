@@ -1,0 +1,156 @@
+/* The heads-up display: monogram, compass navigation, sundial clock, toasts. */
+
+.hud {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem var(--gutter);
+  color: var(--cloud);
+  pointer-events: none; /* the backdrop should not block clicks; children opt back in */
+}
+/* a blurred, darkened band so page content stays readable as it passes under the HUD */
+.hud::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -14px 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgba(8, 13, 28, 0.78), rgba(8, 13, 28, 0.5) 60%, rgba(8, 13, 28, 0));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent);
+}
+.hud > * { pointer-events: auto; }
+
+.hud__mark {
+  justify-self: start;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  padding: 0.5rem 0.2rem;
+}
+
+/* ---------- Compass ---------- */
+.compass {
+  position: relative;
+  width: min(54vw, 520px);
+}
+.compass__window {
+  overflow: hidden;
+  height: 48px;
+  border-block: 1px solid rgba(231, 200, 119, 0.45);
+  background: rgba(8, 13, 28, 0.35);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
+}
+.compass__track {
+  position: relative;
+  left: 50%;
+  height: 100%;
+  width: 0;
+  will-change: transform;
+}
+/* tick marks, drawn wide enough to cover every marker position */
+.compass__track::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -600px;
+  width: 2400px;
+  height: 7px;
+  background: repeating-linear-gradient(to right, rgba(251, 246, 236, 0.5) 0 1px, transparent 1px 13px);
+}
+.compass__marker {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  min-width: 44px;
+  padding: 12px 0.5rem 0;
+  transform: translateX(-50%);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--cloud-soft);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--fast);
+}
+.compass__marker::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  width: 1px; height: 12px;
+  background: var(--gold-bright);
+}
+.compass__marker:hover { color: var(--cloud); }
+.compass__marker[aria-current="true"] { color: var(--gold-bright); }
+.compass__needle {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 9px; height: 9px;
+  background: var(--gold-bright);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* ---------- Sundial ---------- */
+.sundial {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+#sundial-body { fill: var(--gold-bright); }
+.sundial.is-night #sundial-body { fill: none; stroke: var(--cloud); stroke-width: 1.5; }
+
+/* ---------- Toasts ---------- */
+.toasts {
+  position: fixed;
+  right: var(--gutter);
+  top: 4.75rem;
+  z-index: 60;
+  display: grid;
+  gap: 0.6rem;
+  max-width: min(360px, calc(100vw - 2 * var(--gutter)));
+}
+.toast {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.8rem 0.9rem;
+  color: var(--cloud);
+  background: rgba(10, 16, 32, 0.92);
+  border: 1px solid rgba(231, 200, 119, 0.6);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+}
+.toast__gem {
+  width: 14px; height: 14px;
+  background: var(--gold-bright);
+  transform: rotate(45deg);
+}
+.toast__title { font-family: var(--font-display); font-size: 1.05rem; line-height: 1.2; }
+.toast__body { font-size: var(--step--1); color: var(--cloud-soft); }
+.toast__close {
+  width: 44px; height: 44px;
+  margin: -0.6rem -0.6rem -0.6rem 0;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--cloud-soft);
+}
+.toast__close:hover { color: var(--cloud); }
+
+@media (max-width: 640px) {
+  .hud { gap: 0.5rem; padding-inline: 1rem; }
+  .compass { width: 52vw; }
+  .sundial svg { display: none; }
+}
